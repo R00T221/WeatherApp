@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEATHER-APP-II</title>
+    <link rel="stylesheet" href="style.css">
+
+<!-- GOOGLE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600;700&display=swap"
+rel="stylesheet" />
+
+<style>
+
+*,*::before,*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   font-family: 'Merriweather Sans', sans-serif;
+}
+/*================================
+        N-O-T-E:-
+ (*):- 'all:unset':-The all property in CSS is a shorthand property that resets all properties, except unicode-bidi and direction, to their initial or inherited values. This can be useful for resetting all styles for an element or a group of elements.To unset a CSS property for an element, you can use the unset keyword with the property you want to reset. e:g:- 
+ .element {
+  all: unset;
+}
+
+However, if you want to unset a specific property and leave the others unaffected, you can directly target that property:
+.element {
+  //Resetting a specific property 
+  color: unset;
+}
+
+(*):- object-fit:contain :-The object-fit property in CSS is used to specify how an <img>, <video>, or <iframe> element or elements having fixed dimensions should behave when its content is resized within its container.
+
+When you set object-fit: contain, it means that the content should be scaled to maintain its aspect ratio while fitting within the container's dimensions. This ensures that the entire content is visible within the container without being cropped, and it maintains the content's aspect ratio.
+However if the content is narrower than the container,there may be empty spaces on sides or if content is shorter then there may be spaces at top and bottom.
+
+(*):- object-fit:cover :-When you set object-fit: cover in CSS, you're instructing the browser to scale the content (such as an image or video) to cover the entire container while maintaining its aspect ratio. This ensures that the content completely covers the container's dimensions, possibly causing some parts of the content to be cropped if necessary to maintain the aspect ratio.
+The 'cover' value scales the content proportinally so that the longest side of the content covers the longest side of the container which may lead to some content getting cropped if it is narrower and shorter than the container thus also distorting the aspect ratio.
+        
+*/
+
+/* Adding properties to 'current-tab' class of 'tab' class */
+.tab.current-tab{
+  background-color:rgba(219,226,239,0.5);
+  border-radius: 4px;
+}
+/* Adding properties to active class which is used for the tab to be displayed on UI OR removed from UI.Below is the active class for form-container class */
+.form-container.active{
+    scale: 1;
+    opacity:1;
+    display: flex;
+}
+
+/* .btn{
+    all: unset;
+} */
+
+/* ACTIVE CLASS FOR grant-location-container.These values will be effectively visible only when active class is added using J.s */
+.grant-location-container.active{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
+
+}
+
+/* ACTIVE class for Loading Screen */
+.loading-container.active{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*ACTIVE class for user-info-container WHICH CONTAINS ALL WEATHER INFO.  */
+.user-info-container.active{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* STYLING parameter CLASS FOR 3 CARDS */
+.parameter{
+    width: 30%;
+    max-width:200px;
+    background-color:rgba(219,226,239,0.5) ;
+    border-radius: 5px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 5px 0;
+    align-items: center;
+}
+/* .user-info-container img[data-countryIcon]{
+    border-radius: unset;
+
+} */
+
+/* Active class for search form container */
+.form-container.active{
+ display:flex;
+ justify-content: center;
+ align-items: center;
+ margin: 0 auto;
+ gap:0 10px;
+ margin-bottom: 3rem;
+}
+/* Active class for error container */
+.error-cont.active{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+@media  screen and (max-width: 640px)  {
+
+    .parameter{
+        display: flex;
+        flex-direction: row;
+        /* justify-content: start; */
+        gap: 5px 10px;
+        width: 100%;
+        max-width: 100%;
+    }
+    .form-container.active{
+        display: flex;
+        flex-direction: column;
+        gap: 10px,0;
+        width: 110%;
+    }
+    
+}
+
+</style>
+
+
+</head>
+<body>
+   
+
+<!--(A): Wrapper div -->
+<div class="wrapper w-[100vw] h-[100vh] text-colorLight2 bg-gradiento overflow-x-hidden pb-6">
+<h1 class="text-center uppercase pt-5 font-bold font-Merri xsm:tracking-widest sm:tracking-normal sm:text-[1.8rem]" style="word-spacing: 4px;" >Weather App</h1>
+
+<!--(B): Tab Container -->
+<div class="tab-container flex justify-between w-[90%] max-w-[550px] m-[0_auto] mt-[3rem] xsm:flex-col  sm:flex-row xsm:justify-center      xsm:items-center xsm:gap-5  sm:justify-between">
+<p class="tab current-tab cursor-pointer font-[0.875rem] tracking-[1.75px] p-[5px_10px]" data-userWeather>Your Weather</p>
+<p class="tab cursor-pointer font-[0.875rem] tracking-[1.75px] p-[5px_10px] " data-searchWeather>Search Weather</p>
+<!-- N-O-T-E:- 'data-userWeather' and 'data-searchWeather' are custom attributes given to 'p' tags that will be used in JS to fetch elements.-->
+</div> <!--Tab Container Ends..-->
+
+<!-- WEATHER CONTAINER.It contains all UI tabs like grant-location tab,User-Weather Tab and search-city tab -->
+<div class="weather-container flex  flex-col justify-center items-center  m-[0_auto] w-[90%]" style="margin-block: 4rem;"  >
+
+
+<!---- Grant Location (User) Container-- -->
+<div class="grant-location-container hidden w-[90%]  ">
+
+ <img src="assets/location.png" alt="" width="70" height="70" loading="lazy" class="mb-[2rem]">
+
+ <p class="font-[600] text-[1.5rem]">Grant Location Access</p>
+ <p class="font-[500] text-[0.85rem] mt-[0.75rem] mb-[1.75rem] tracking-[0.8px]">Allow Access to get Weather Information</p>
+ <button  class="btn text-colorLight2 font-[0.875rem] uppercase rounded-[5px] bg-colorDark2 p-[6px_20px] cursor-pointer m-0 border-none mb-[10px]"  data-grantAccess>Grant Access</button>
+
+</div>  <!--grant-location-container ends-->
+
+<!-- SEARCH-WEATHER U.I FORM -->
+<form action="" class="form-container hidden w-[70%] " data-searchForm >
+
+    <input placeholder="Search For City" data-searchInput id="inputt" class="w-[calc(65%-80px)] h-[40px] p-[0_20px] bg-[rgba(172,174,177,0.5)]  rounded-[10px] outline-[#bdb8b8]  mt-3 placeholder:text-[rgba(255,255,255,0.62)] transition-[outline] duration-700 focus:outline-[#b8b5b5] focus:border-none placeholder:tracking-[2px] first-letter:capitalize" style="transition: outline; transition-duration: 0.7s;">
+
+    <button class="btn w-[40px] h-[40px] flex justify-center items-center rounded-full bg-colorDark2 mt-3">
+
+        <img src="assets/search.png" width="20" height="20" loading="lazy" alt="">
+
+    </button>
+
+</form>
+
+<!-- LOADING SCREEN CONTAINER:-Visible when we click on user-location Weather(Your Weather) -->
+<div class="loading-container hidden w-[90%]">
+
+    <img src="assets/loading.gif" alt="" width="150" height="150">
+
+    <p class="uppercase ml-1">Loading..</p>
+
+</div> <!--Loading Screen Container Ends-->
+
+<!-- SHOW WEATHER INFO:-Will be used in user-weather-info as well as in search-weather-info-->
+<div class="user-info-container w-[80%] hidden pb-6">
+
+
+    <!-- div for city-name and flag -->
+    <div class="name flex flex-row gap-y-[0.5rem] items-center gap-x-3 mb-4">
+    <!-- Both cityName and CountryIcon will be added dynamically using J.S -->
+        <p data-cityName class="text-[1.8rem]"></p>
+
+        <img data-countryIcon class="w-[32px] h-[30px] object-contain border-none clear-none ">
+
+    </div>
+
+    <!-- Weather Description(haze,thunderstorm etc) -->
+  <p data-weatherDesc class="text-[1.2rem] font-[200] first-letter:capitalize"></p>
+
+<!-- Weather Icon -->
+  <img data-weatherIcon class="w-[80px] h-[80px]" > <!--Will be added dynamically-->
+  <!--all:unset used so that the default properties are not visible and in some cases where loading time is large,an outline of img at the original position is visible-->
+
+
+<!-- TEMPERATURE -->
+  <p data-temp class="text-[2.5rem] font-[700]"></p> <!--Will be added dynamically-->
+
+<!--3 CARDS -PARAMETERS OF WEATHER -->
+<div class="parameter-container sm:flex sm:flex-row sm:gap-[10px_20px] sm:justify-center  sm:items-center sm:mt-[2rem] sm:w-[90%] xsm:flex xsm:flex-wrap xsm:flex-row xsm:justify-center xsm:items-center xsm:gap-y-4 xsm:w-[100%]  xsm:mt-[2rem]">
+
+<!-- Card-1 -->
+<div class="parameter ">
+    <img src="assets/wind.png" class="w-[50px] h-[50px]">
+    <p class="text-[1.15rem] font-[600] uppercase">Windspeed</p>
+    <p data-windspeed class="text-[1rem] font-[200]"></p>
+</div>
+
+<!-- Card-2 -->
+<div class="parameter">
+    <img src="assets/humidity.png" class="w-[50px] h-[50px]">
+    <p class="text-[1.15rem] font-[600] uppercase">Humidity</p>
+    <p data-humidity class="text-[1rem] font-[200]"></p>
+</div>
+
+<!-- Card-3 -->
+<div class="parameter">
+    <img src="assets/cloud.png" class="w-[50px] h-[50px]">
+    <p class="text-[1.15rem] font-[600] uppercase">Clouds</p>
+    <p data-cloudiness class="text-[1rem] font-[200]"></p>
+</div>
+
+</div> <!--parameter-container ends-->
+
+</div> <!--user-info-container ends-->
+
+<!-- Creating an error container -->
+<div error-cont class="error-cont w-[90%] hidden">
+
+<!-- Adding error image -->
+<img src="assets/not-found.png" width="160" height="160" class="mt-5 mb-5 hidden mx-auto rounded-full" error-notFound>
+
+<!-- Adding Netwrok error image -->
+<img src="assets/network-error.jpg" width="160" height="160" class="mt-5 mb-5 hidden mx-auto rounded-full" error-noInternet>
+
+    <!-- Creating an element which will be used to display errors dynamically -->
+<p data-error class="mt-5 font-bold text-red-400 tracking-[2px] text-center"></p>
+
+</div>
+
+</div>  <!--Weather-container ends-->
+
+
+</div> <!--Wrapper div ends-->
+
+
+
+
+<script src="script.js"></script>
+</body>
+</html>
